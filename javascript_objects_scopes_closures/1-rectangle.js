@@ -1,5 +1,5 @@
 class Rectangle  {
-    constructor(w,h) { width,height  }
+    constructor(w,h) { width:w,height:h  }
   }
 
 
