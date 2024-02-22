@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shopping-cart</title>
+</head>
+<body>
+    
+    <script>
+        let availableItems = ["Shampoo", "Soap", "Sponge", "Water" ];
+        let cart = getCartFromStorage();
+        if(window.sessionStorage){
+            createStore();
+            displayCart();
+        }else{
+            alert("Sorry, your browser does not support Web storage. Try again with a better one")
+        }
+
+        function getCartFromStorage(){
+            return JSON.parse(sessionStorage.getItem('cart')) ? JSON.parse(sessionStorage.getItem('cart')) : {};
+        }
+
+        function addItemToCart(item){
+            sessionStorage.removeItem('IsThisFirstTime_Log_From_LiveServer');
+
+           if(item in cart){
+            cart[item] += 1
+           }
+           else{
+            cart[item] = 1
+           }
+
+           sessionStorage.setItem('cart',JSON.stringify(cart))
+           displayCart();
+        }
+
+        function removeItemfromCart(item){
+            delete cart[item];
+            sessionStorage.setItem('cart',JSON.stringify(cart));
+            displayCart();
+        }
+
+        function clearCart(){
+
+            sessionStorage.clear();
+            cart = {}
+            displayCart();
+        }
+
+        function createStore(){
+            const h2 = document.createElement('h2');
+            h2.textContent = 'Available products:'
+            document.body.appendChild(h2)
+
+            let ul = document.createElement('ul');
+            document.body.appendChild(ul);
+
+            availableItems.forEach((item)=>{
+                li = document.createElement('li');
+                li.innerHTML = item;
+                li.addEventListener('click',() => addItemToCart(item))
+                ul.appendChild(li);
+            })
+        }
+
+        function displayCart(){
+
+            if(!document.getElementById('h2cart')){
+            const h2display = document.createElement('h2');
+            h2display.textContent = 'Your cart:';
+            h2display.id = 'h2cart';
+            document.body.append(h2display);
+            }
+            
+            if(!document.getElementById('cartdiv')){
+            const div = document.createElement('div');   
+            div.id = 'cartdiv';         
+            document.body.appendChild(div);
+            const emptyul = document.createElement('ul');
+            emptyul.id = 'emtyul';
+            div.appendChild(emptyul);
+            }
+            else{
+                list = document.getElementById('list');   
+                if(list)
+                {list.remove()} 
+                listempty = document.getElementById('listempty');   
+                if(listempty)
+                {listempty.remove()}
+            }
+            updateCart();
+        }
+
+        function updateCart(){
+
+            divcart = document.getElementById('cartdiv');
+            ul = document.getElementById('emtyul')
+            if(Object.keys(cart).length  == 0 )
+            {
+                const liempty = document.createElement('li');
+                liempty.id ='listempty'
+                liempty.innerText = 'Your cart is empty';
+                clear = document.getElementById('clearli')
+                if(clear)
+                {clear.remove()}
+                ul.append(liempty);
+            }
+            else{
+                if(!document.getElementById('clearli')){
+                    const li = document.createElement('li');
+                        li.innerHTML = 'Clear my cart';
+                        li.id = 'clearli'
+                        li.onclick = clearCart;
+                        ul.append(li);
+                }
+                divli = document.createElement('div')
+                divli.id='list'
+                ul.append(divli);
+                for(item in cart){
+                    const li = document.createElement('li');
+                    li.innerHTML = `${item} x ${cart[item]} <span id=${item} onclick="removeItemfromCart(id)">(remove)</span>`
+                    divli.append(li)
+                }
+                    
+            }
+    
+        }
+
+    </script>
+</body>
+</html>
