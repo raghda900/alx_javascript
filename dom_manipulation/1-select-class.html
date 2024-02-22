@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Selecting Elements</title>
+  <style>
+    .highlight {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <p class="highlight">This is a highlighted paragraph.</p>
+  <p>This is a normal paragraph.</p>
+  <script>
+    //select elemet of class highlight
+    const highlight = document.querySelectorAll('.highlight');
+    highlight.forEach((item)=>{
+        item.style.fontWeight = 'bold';
+    })
+  </script>
+</body>
+</html>
